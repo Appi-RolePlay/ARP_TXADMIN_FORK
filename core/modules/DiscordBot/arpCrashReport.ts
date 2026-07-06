@@ -14,6 +14,11 @@ const console = consoleFactory(modulename);
 
 const CONSOLE_TAIL_BYTES = 48 * 1024;
 
+//Optional GIF shown at the bottom of the crash embed. Must be a direct image URL (ends in .gif and
+//is fetchable by Discord — e.g. a Discord CDN / Tenor "media" link, NOT a tenor.com/view page).
+//Empty string -> no image, embed looks exactly as before.
+const CRASH_GIF_URL = 'https://media1.tenor.com/m/iVVi-enilPAAAAAC/sound-the-car-alarm-cat.gif';
+
 //Same stripping the logger applies for files, plus the live-console time markers ({§68eb1a2c})
 const regexColors = /\x1B[^m]*?m/g;
 const regexControls = /[\x00-\x08\x0B-\x1A\x1C-\x1F\x7F]|(?:\x1B\[|\x9B)[\d;]+[@-K]/g;
@@ -44,6 +49,7 @@ export const sendArpCrashReport = (cause: string, reason: string) => {
             ],
             footer: { text: txConfig.general.serverName },
         }).setColor(embedColors.danger).setTimestamp();
+        if (CRASH_GIF_URL) embed.setImage(CRASH_GIF_URL);
         const attachment = new AttachmentBuilder(
             Buffer.from(consoleTail, 'utf8'),
             { name: 'console-tail.txt', description: 'Last server console output before the crash' },
