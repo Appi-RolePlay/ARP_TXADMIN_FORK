@@ -8,6 +8,7 @@ import { SYM_SYSTEM_AUTHOR } from '@lib/symbols';
 import { ChildProcessState } from '@modules/FxRunner/ProcessManager';
 import { secsToShortestDuration } from '@lib/misc';
 import { setRuntimeFile } from '@lib/fxserver/runtimeFiles';
+import { sendArpCrashReport } from '@modules/DiscordBot/arpCrashReport';
 import { FxMonitorHealth } from '@shared/enums';
 import cleanPlayerName from '@shared/cleanPlayerName';
 const console = consoleFactory(modulename);
@@ -215,6 +216,11 @@ export default class FxMonitor {
                 console.verbose.dir(this.lastHealthCheckError.debugData);
                 console.verbose.debug('-'.repeat(40));
             }
+
+            //ARP: report the crash/hang through the existing Discord bot integration (no-op while
+            //the bot is not configured). Must run before restartServer() while the console buffer
+            //still holds the crash output and the child still knows its uptime.
+            sendArpCrashReport(result.cause, result.reason);
 
             //Restarting the server
             this.resetState(); //will set the status to OFFLINE
