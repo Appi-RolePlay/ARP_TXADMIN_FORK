@@ -2,6 +2,7 @@ const modulename = 'ArpCrashReport';
 import { AttachmentBuilder, EmbedBuilder } from 'discord.js';
 import { embedColors } from './discordHelpers';
 import { msToShortestDuration } from '@lib/misc';
+import got from '@lib/got';
 import consoleFactory from '@lib/console';
 const console = consoleFactory(modulename);
 
@@ -14,9 +15,10 @@ const console = consoleFactory(modulename);
 
 const CONSOLE_TAIL_BYTES = 48 * 1024;
 
-//Optional GIF shown at the bottom of the crash embed. Must be a direct image URL (ends in .gif and
-//is fetchable by Discord — e.g. a Discord CDN / Tenor "media" link, NOT a tenor.com/view page).
-//Empty string -> no image, embed looks exactly as before.
+//Optional GIF shown at the bottom of the crash embed. We fetch it SERVER-SIDE and re-upload it to
+//Discord as a real attachment (see below) instead of handing Discord the URL — that way Discord
+//never has to reach the host itself, so the image always renders regardless of proxy/host quirks.
+//Must be a direct image file URL (a real .gif), NOT a tenor.com/view HTML page. Empty -> no image.
 const CRASH_GIF_URL = 'https://media1.tenor.com/m/iVVi-enilPAAAAAC/sound-the-car-alarm-cat.gif';
 
 //Same stripping the logger applies for files, plus the live-console time markers ({§68eb1a2c})
@@ -49,12 +51,27 @@ export const sendArpCrashReport = (cause: string, reason: string) => {
             ],
             footer: { text: txConfig.general.serverName },
         }).setColor(embedColors.danger).setTimestamp();
-        if (CRASH_GIF_URL) embed.setImage(CRASH_GIF_URL);
-        const attachment = new AttachmentBuilder(
-            Buffer.from(consoleTail, 'utf8'),
-            { name: 'console-tail.txt', description: 'Last server console output before the crash' },
-        );
-        channel.send({ embeds: [embed], files: [attachment] }).catch((error: Error) => {
+        const files: AttachmentBuilder[] = [
+            new AttachmentBuilder(
+                Buffer.from(consoleTail, 'utf8'),
+                { name: 'console-tail.txt', description: 'Last server console output before the crash' },
+            ),
+        ];
+
+        //Console is captured synchronously above (before restart); the gif fetch + send is async and
+        //fire-and-forget. Re-uploading the gif ourselves guarantees it renders in the embed.
+        void (async () => {
+            if (CRASH_GIF_URL) {
+                try {
+                    const gif = await got(CRASH_GIF_URL, { responseType: 'buffer', timeout: { request: 5000 } });
+                    files.push(new AttachmentBuilder(gif.body as Buffer, { name: 'alert.gif' }));
+                    embed.setImage('attachment://alert.gif');
+                } catch (error) {
+                    console.warn(`Crash gif fetch failed, sending without it: ${(error as Error).message}`);
+                }
+            }
+            await channel.send({ embeds: [embed], files });
+        })().catch((error: Error) => {
             console.error(`Failed to send crash report to Discord: ${error.message}`);
         });
     } catch (error) {
