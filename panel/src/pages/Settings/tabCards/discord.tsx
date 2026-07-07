@@ -27,6 +27,7 @@ export const pageConfigs = {
     botToken: getPageConfig('discordBot', 'token'),
     discordGuild: getPageConfig('discordBot', 'guild'),
     warningsChannel: getPageConfig('discordBot', 'warningsChannel'),
+    statusPlayerCount: getPageConfig('discordBot', 'statusPlayerCount'),
     embedJson: getPageConfig('discordBot', 'embedJson'),
     embedConfigJson: getPageConfig('discordBot', 'embedConfigJson'),
 } as const;
@@ -157,6 +158,21 @@ export default function ConfigCardDiscord({ cardCtx, pageCtx }: SettingsCardProp
                     The ID of the channel to send Announcements (eg server restarts). <br />
                     You can leave it blank to disable this feature. <br />
                     To get the channel ID, go to Discord's settings and <TxAnchor href="https://support.discordapp.com/hc/article_attachments/115002742731/mceclip0.png">enable developer mode</TxAnchor>, then right-click on the channel name and select "Copy ID".
+                </SettingItemDesc>
+            </SettingItem>
+            <SettingItem label="Player Count in Bot Status">
+                <SwitchText
+                    id={cfg.statusPlayerCount.eid}
+                    checkedLabel="Visible"
+                    uncheckedLabel="Hidden"
+                    variant="checkedGreen"
+                    checked={states.statusPlayerCount}
+                    onCheckedChange={cfg.statusPlayerCount.state.set}
+                    disabled={pageCtx.isReadOnly}
+                />
+                <SettingItemDesc>
+                    Show the current player count (eg. <InlineCode>[15/48] on ServerName</InlineCode>) in the bot's activity status. <br />
+                    When hidden, the bot activity will only show the server name.
                 </SettingItemDesc>
             </SettingItem>
             {/* <SettingItem label="Status Embed">

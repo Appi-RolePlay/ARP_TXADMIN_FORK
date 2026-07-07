@@ -32,6 +32,13 @@ const warningsChannel = typeNullableConfig({
     fixer: SYM_FIXER_DEFAULT,
 });
 
+const statusPlayerCount = typeDefinedConfig({
+    name: 'Player Count in Bot Status',
+    default: true,
+    validator: z.boolean(),
+    fixer: SYM_FIXER_DEFAULT,
+});
+
 
 //We are not validating the JSON, only that it is a string
 export const attemptMinifyJsonString = (input: string) => {
@@ -64,6 +71,7 @@ export default {
     token,
     guild,
     warningsChannel,
+    statusPlayerCount,
     embedJson,
     embedConfigJson,
 } as const;

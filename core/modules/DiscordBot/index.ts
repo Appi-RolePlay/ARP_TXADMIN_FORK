@@ -202,10 +202,13 @@ export default class DiscordBot {
 
         //Updating bot activity
         try {
-            const serverClients = txCore.fxPlayerlist.onlineCount;
-            const serverMaxClients = txCore.cacheStore.get('fxsRuntime:maxClients') ?? '??';
             const serverName = txConfig.general.serverName;
-            const message = `[${serverClients}/${serverMaxClients}] on ${serverName}`;
+            let message = serverName;
+            if (txConfig.discordBot.statusPlayerCount) {
+                const serverClients = txCore.fxPlayerlist.onlineCount;
+                const serverMaxClients = txCore.cacheStore.get('fxsRuntime:maxClients') ?? '??';
+                message = `[${serverClients}/${serverMaxClients}] on ${serverName}`;
+            }
             this.#client.user.setActivity(message, { type: ActivityType.Watching });
         } catch (error) {
             console.verbose.warn(`Failed to set bot activity: ${(error as Error).message}`);
