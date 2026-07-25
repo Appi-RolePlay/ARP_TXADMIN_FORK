@@ -17,7 +17,6 @@ import FxPlayerlist from '@modules/FxPlayerlist';
 import Database from '@modules/Database';
 import CacheStore from '@modules/CacheStore';
 import UpdateChecker from '@modules/UpdateChecker';
-import ArpDb from '@modules/ArpDb';
 const console = consoleFactory();
 
 
@@ -38,7 +37,6 @@ export type TxCoreType = {
     fxScheduler: FxScheduler;
 
     //Other
-    arpDb: ArpDb;
     discordBot: DiscordBot;
     translator: Translator;
     updateChecker: UpdateChecker;
@@ -110,7 +108,6 @@ export default function bootTxAdmin() {
 
     //Very Low Priority
     _txCore.updateChecker = startModule(UpdateChecker);
-    _txCore.arpDb = startModule(ArpDb);
 
 
     /**

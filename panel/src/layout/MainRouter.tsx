@@ -22,7 +22,6 @@ import SettingsPage from "@/pages/Settings/SettingsPage";
 import UnauthorizedPage from "@/pages/UnauthorizedPage";
 import DiagnosticsPage from "@/pages/Diagnostics/DiagnosticsPage";
 import AdvancedPage from "@/pages/AdvancedPage";
-import ArpConfigPage from "@/pages/ArpConfig/ArpConfigPage";
 
 
 type RouteType = {
@@ -117,12 +116,6 @@ const allRoutes: RouteType[] = [
         title: 'CFG Editor',
         permission: 'server.cfg.editor',
         Page: <Iframe legacyUrl="cfgEditor" />
-    },
-    {
-        path: '/server/arp-config',
-        title: 'Game Config',
-        permission: 'arp.config',
-        Page: <ArpConfigPage />
     },
     {
         path: '/server/setup',
