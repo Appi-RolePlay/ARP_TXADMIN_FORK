@@ -63,6 +63,7 @@ export default class AdminStore {
             'txadmin.log.view': 'View System Logs', //FIXME: rename to system.log.view
             'server.log.view': 'View Server Logs',
             'players.remove_ids': 'Remove Player IDs',
+            'arp.config': 'ARP: Manage Game Config', //runtime config keys + def-table rows
 
             'menu.vehicle': 'Spawn / Fix Vehicles',
             'menu.clear_area': 'Reset world area',

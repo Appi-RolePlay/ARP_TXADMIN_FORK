@@ -65,6 +65,10 @@ export { default as whitelist_actions } from './whitelist/actions';
 
 export { default as advanced_runCommand } from './advanced/runCommand';
 
+export { default as arpConfig_getKeys } from './arpConfig/getKeys';
+export { default as arpConfig_getRows } from './arpConfig/getRows';
+export { default as arpConfig_runAction } from './arpConfig/runAction';
+
 //FIXME: reorganizar TODAS rotas de logs, incluindo listagem e download
 export { default as serverLog } from './serverLog.js';
 export { default as serverLogPartial } from './serverLogPartial.js';

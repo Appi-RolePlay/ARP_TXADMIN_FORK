@@ -77,6 +77,11 @@ export default () => {
     //CFG Editor
     router.post('/cfgEditor/save', apiAuthMw, routes.cfgEditor_save);
 
+    //ARP Game Config
+    router.get('/arp/config/keys', apiAuthMw, routes.arpConfig_getKeys);
+    router.get('/arp/config/rows', apiAuthMw, routes.arpConfig_getRows);
+    router.post('/arp/config/action', apiAuthMw, routes.arpConfig_runAction);
+
     //Control routes
     router.post('/intercom/:scope', intercomAuthMw, routes.intercom);
 

@@ -10,6 +10,11 @@ export type { ResetServerDataPathResp } from "@core/routes/settings/resetServerD
 export type { GetBanTemplatesSuccessResp } from "@core/routes/banTemplates/getBanTemplates";
 export type { SaveBanTemplatesResp, SaveBanTemplatesReq } from "@core/routes/banTemplates/saveBanTemplates";
 
+//ARP game config stuff
+export type { GetArpKeysResp } from "@core/routes/arpConfig/getKeys";
+export type { GetArpRowsResp } from "@core/routes/arpConfig/getRows";
+export type { RunArpActionResp } from "@core/routes/arpConfig/runAction";
+
 //Stats stuff
 export type { SvRtLogFilteredType, SvRtPerfCountsThreadType } from "@core/modules/Metrics/svRuntime/perfSchemas";
 export type { SvRtPerfThreadNamesType } from "@core/modules/Metrics/svRuntime/config";
